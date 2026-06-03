@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECLIPSA — Descubre tu fragancia</title>
+<style>
+  /* ============================================================
+     ECLIPSA — Colección Orígenes
+     Fragrance Quiz — Premium Experience
+     ============================================================ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap');
+
+  :root {
+    --black:       #0B0B0B;
+    --deep:        #111010;
+    --ivory:       #EAE3D9;
+    --gold:        #C8A96A;
+    --gold-light:  #DFC08A;
+    --gold-dim:    #8a6e3c;
+    --burgundy:    #4A0D12;
+    --terracota:   #B5634A;
+    --sage:        #7A8C70;
+    --petrol:      #1C3A45;
+    --stone:       #5C5A56;
+    --lavender:    #7C7A8C;
+
+    /* Fragrance accent colors */
+    --c1: #8B6B8A; /* Orquídea - lavanda */
+    --c2: #C97A8A; /* Rosa Andina */
+    --c3: #3D2B1F; /* Jazmín de Noche */
+    --c4: #4A7A8A; /* Lirio de Agua */
+    --c5: #C8864A; /* Brisa Insular */
+    --c6: #2C4A5A; /* Costa Nocturna */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--ivory);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ---- Noise texture overlay ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ============================================================
+     COVER
+     ============================================================ */
+  #cover {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    overflow: hidden;
+  }
+
+  .cover-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, #1a0a0040 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 20% 80%, #4A0D1218 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 70%, #C8A96A0c 0%, transparent 60%),
+      linear-gradient(160deg, #0d0d0d 0%, #0b0a09 50%, #0e0b08 100%);
+    z-index: 0;
+  }
+
+  /* Floating particles */
+  .particles {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    animation: drift var(--dur) ease-in-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes drift {
+    0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+    20%  { opacity: var(--op); }
+    80%  { opacity: var(--op); }
+    100% { opacity: 0; transform: translateY(-120px) scale(1); }
+  }
+
+  .cover-inner { position: relative; z-index: 2; max-width: 680px; }
+
+  .brand-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(11px, 1.5vw, 13px);
+    letter-spacing: 0.55em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.3s;
+  }
+
+  .cover-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 7vw, 72px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--ivory);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.6s;
+  }
+
+  .cover-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .cover-subtitle {
+    font-size: clamp(14px, 1.8vw, 16px);
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(234,227,217,0.65);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.9s;
+  }
+
+  .cover-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 28px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.75s;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 16px 48px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s ease;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.2s;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.77,0,0.175,1);
+  }
+
+  .btn-primary:hover { color: var(--black); }
+  .btn-primary:hover::before { transform: scaleX(1); }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .collection-label {
+    margin-top: 56px;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: rgba(200,169,106,0.35);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.5s;
+  }
+
+  /* ============================================================
+     QUIZ SECTION
+     ============================================================ */
+  #quiz {
+    display: none;
+    min-height: 100vh;
+    padding: 0 0 80px;
+    position: relative;
+  }
+
+  .quiz-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(11,11,11,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200,169,106,0.1);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .quiz-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .progress-wrap {
+    flex: 1;
+    max-width: 320px;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(200,169,106,0.5);
+    margin-bottom: 6px;
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: rgba(200,169,106,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.77,0,0.175,1);
+    width: 0%;
+  }
+
+  .quiz-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 64px 24px 40px;
+  }
+
+  .question-wrap {
+    display: none;
+    opacity: 0;
+    animation: questionIn 0.5s ease forwards;
+  }
+
+  .question-wrap.active {
+    display: block;
+  }
+
+  @keyframes questionIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(26px, 4vw, 38px);
+    line-height: 1.25;
+    color: var(--ivory);
+    margin-bottom: 10px;
+  }
+
+  .q-hint {
+    font-size: 13px;
+    color: rgba(234,227,217,0.4);
+    margin-bottom: 40px;
+    letter-spacing: 0.05em;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .option-card {
+    position: relative;
+    padding: 22px 24px;
+    border: 1px solid rgba(200,169,106,0.18);
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: border-color 0.3s ease, background 0.3s ease, transform 0.2s ease;
+    overflow: hidden;
+  }
+
+  .option-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,169,106,0.06), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .option-card:hover {
+    border-color: rgba(200,169,106,0.5);
+    background: rgba(200,169,106,0.05);
+    transform: translateY(-2px);
+  }
+
+  .option-card:hover::after { opacity: 1; }
+
+  .option-card.selected {
+    border-color: var(--gold);
+    background: rgba(200,169,106,0.1);
+  }
+
+  .option-card.selected::after { opacity: 1; }
+
+  .option-card.selected .opt-radio {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .option-card.selected .opt-radio::after {
+    opacity: 1;
+  }
+
+  .opt-radio {
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgba(200,169,106,0.3);
+    border-radius: 50%;
+    position: absolute;
+    top: 22px;
+    right: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .opt-radio::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    background: var(--black);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .opt-emoji {
+    font-size: 22px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .opt-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ivory);
+    margin-bottom: 5px;
+    padding-right: 28px;
+  }
+
+  .opt-sub {
+    font-size: 12px;
+    color: rgba(234,227,217,0.45);
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+  }
+
+  .btn-next {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 36px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s ease;
+    opacity: 0.3;
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-next.ready {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .btn-next:hover { color: var(--black); }
+  .btn-next .btn-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.77,0,0.175,1);
+    z-index: 0;
+  }
+  .btn-next:hover .btn-bg { transform: scaleX(1); }
+  .btn-next span { position: relative; z-index: 1; }
+  .btn-next svg { position: relative; z-index: 1; transition: transform 0.3s; }
+  .btn-next:hover svg { transform: translateX(4px); }
+
+  /* ============================================================
+     RESULT
+     ============================================================ */
+  #result {
+    display: none;
+    padding: 80px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .result-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .result-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 300;
+    text-align: center;
+    color: var(--ivory);
+    margin-bottom: 56px;
+    line-height: 1.2;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+
+  .result-card {
+    position: relative;
+    border: 1px solid rgba(200,169,106,0.3);
+    padding: 56px 48px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.025), rgba(200,169,106,0.03));
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px; right: -1px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-light) 70%, transparent 100%);
+  }
+
+  .result-accent {
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--result-color, #C8A96A) 0%, transparent 70%);
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  .result-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+
+  .result-glyph {
+    font-size: 56px;
+    line-height: 1;
+  }
+
+  .result-meta { flex: 1; min-width: 200px; }
+
+  .result-collection {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .result-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 300;
+    color: var(--ivory);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .result-emotion {
+    display: inline-block;
+    padding: 4px 16px;
+    border: 1px solid var(--gold-dim);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 24px;
+    padding: 32px 0;
+    border-top: 1px solid rgba(200,169,106,0.12);
+    border-bottom: 1px solid rgba(200,169,106,0.12);
+    margin-bottom: 32px;
+  }
+
+  .result-item-label {
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+  }
+
+  .result-item-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: var(--ivory);
+  }
+
+  .result-desc {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(234,227,217,0.7);
+    margin-bottom: 20px;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .result-why {
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(234,227,217,0.5);
+    padding-top: 20px;
+    border-top: 1px solid rgba(200,169,106,0.1);
+  }
+
+  .result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.9s;
+  }
+
+  .btn-ghost {
+    padding: 14px 32px;
+    border: 1px solid rgba(200,169,106,0.3);
+    color: rgba(234,227,217,0.6);
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.3s ease;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ============================================================
+     COLLECTION SECTION
+     ============================================================ */
+  #collection {
+    display: none;
+    padding: 80px 24px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 300;
+    text-align: center;
+    color: var(--ivory);
+    margin-bottom: 56px;
+  }
+
+  .section-divider {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 16px;
+  }
+
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .frag-card {
+    padding: 32px 28px;
+    border: 1px solid rgba(200,169,106,0.15);
+    background: rgba(255,255,255,0.02);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .frag-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--frag-color), transparent);
+    opacity: 0.6;
+  }
+
+  .frag-card:hover {
+    border-color: rgba(200,169,106,0.4);
+    transform: translateY(-4px);
+  }
+
+  .frag-glyph { font-size: 32px; margin-bottom: 16px; display: block; }
+
+  .frag-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ivory);
+    margin-bottom: 8px;
+  }
+
+  .frag-emotion {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--frag-color);
+    margin-bottom: 16px;
+  }
+
+  .frag-line {
+    font-size: 11px;
+    color: rgba(234,227,217,0.4);
+    margin-bottom: 4px;
+    display: flex;
+    gap: 8px;
+    letter-spacing: 0.03em;
+  }
+
+  .frag-line strong {
+    color: rgba(200,169,106,0.5);
+    font-weight: 400;
+    min-width: 48px;
+  }
+
+  .frag-desc {
+    margin-top: 16px;
+    font-size: 12px;
+    color: rgba(234,227,217,0.35);
+    line-height: 1.7;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    border-top: 1px solid rgba(200,169,106,0.08);
+    padding-top: 14px;
+  }
+
+  /* Footer */
+  .quiz-footer {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+    border-top: 1px solid rgba(200,169,106,0.1);
+  }
+
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    margin-bottom: 8px;
+  }
+
+  .footer-copy {
+    font-size: 11px;
+    color: rgba(234,227,217,0.2);
+    letter-spacing: 0.1em;
+  }
+
+  /* ============================================================
+     UTILITIES & ANIMATIONS
+     ============================================================ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hidden { display: none !important; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .quiz-header { padding: 16px 20px; }
+    .quiz-body { padding: 40px 20px 32px; }
+    .result-card { padding: 36px 24px; }
+    .result-top { gap: 20px; }
+    .options-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     COVER
+     ============================================================ -->
+<section id="cover">
+  <div class="cover-bg"></div>
+  <div class="particles" id="particles"></div>
+  <div class="cover-inner">
+    <p class="brand-mark">ECLIPSA</p>
+    <h1 class="cover-title">Descubre tu<br><em>fragancia</em></h1>
+    <div class="cover-divider"></div>
+    <p class="cover-subtitle">Responde esta breve experiencia sensorial y encuentra la vela que conecta con tu momento.</p>
+    <button class="btn-primary" onclick="startQuiz()"><span>Iniciar experiencia</span></button>
+    <p class="collection-label">Colección Orígenes · Seis fragancias · Colombia</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     QUIZ
+     ============================================================ -->
+<section id="quiz">
+  <div class="quiz-header">
+    <div class="quiz-brand">ECLIPSA</div>
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="q-label">Pregunta 1 de 8</span>
+        <span id="q-pct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="quiz-body" id="quiz-body">
+    <!-- Questions injected by JS -->
+  </div>
+</section>
+
+<!-- ============================================================
+     RESULT
+     ============================================================ -->
+<section id="result">
+  <p class="result-eyebrow">Tu fragancia ECLIPSA</p>
+  <h2 class="result-intro">La Colección Orígenes<br>ha hablado contigo.</h2>
+  <div class="result-card" id="result-card">
+    <div class="result-accent" id="result-accent"></div>
+    <div class="result-top">
+      <div class="result-glyph" id="r-glyph"></div>
+      <div class="result-meta">
+        <p class="result-collection">Colección Orígenes · ECLIPSA</p>
+        <h3 class="result-name" id="r-name"></h3>
+        <span class="result-emotion" id="r-emotion"></span>
+      </div>
+    </div>
+    <div class="result-grid">
+      <div>
+        <p class="result-item-label">Región</p>
+        <p class="result-item-value" id="r-region"></p>
+      </div>
+      <div>
+        <p class="result-item-label">Aroma</p>
+        <p class="result-item-value" id="r-aroma"></p>
+      </div>
+      <div>
+        <p class="result-item-label">Familia olfativa</p>
+        <p class="result-item-value" id="r-family"></p>
+      </div>
+    </div>
+    <p class="result-desc" id="r-desc"></p>
+    <p class="result-why" id="r-why"></p>
+  </div>
+  <div class="result-actions">
+    <button class="btn-primary" onclick="scrollToCollection()"><span>Ver colección completa</span></button>
+    <button class="btn-ghost" onclick="restartQuiz()">Volver a intentarlo</button>
+  </div>
+</section>
+
+<!-- ============================================================
+     COLLECTION
+     ============================================================ -->
+<section id="collection">
+  <p class="section-label">Catálogo completo</p>
+  <div class="section-divider"></div>
+  <h2 class="section-title">Colección Orígenes</h2>
+  <div class="collection-grid" id="collection-grid"></div>
+</section>
+
+<footer class="quiz-footer" id="quiz-footer">
+  <p class="footer-brand">ECLIPSA</p>
+  <p class="footer-copy">Fragancias artesanales inspiradas en Colombia · Colección Orígenes</p>
+</footer>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const fragrances = {
+  "Orquídea de Niebla": {
+    glyph: "🌸",
+    emotion: "Calma",
+    region: "Bosques de niebla andinos",
+    aroma: "Lavanda + Vainilla Francesa",
+    family: "Floral aromática cremosa",
+    color: "#8B6B8A",
+    desc: "No busca recrear literalmente el aroma de una orquídea, sino la sensación emocional de caminar entre bosques de niebla andinos. La lavanda representa calma, humedad y tranquilidad; la vainilla francesa aporta confort y sensación de abrazo.",
+    sensations: ["relajación", "abrazo", "descanso", "introspección", "spa", "montaña fría", "neblina"],
+    whyMap: {
+      default: "En este momento, tu espacio pide quietud. Orquídea de Niebla envuelve el aire con la calma de los bosques andinos: lavanda suave, vainilla cremosa, y la sensación de que todo puede descansar.",
+    }
+  },
+  "Rosa Andina": {
+    glyph: "🌹",
+    emotion: "Amor",
+    region: "Sabana de Bogotá",
+    aroma: "Rosa",
+    family: "Floral clásica fresca",
+    color: "#C97A8A",
+    desc: "Inspirada en los cultivos de rosas de altura de la Sabana de Bogotá. Representa la elegancia natural, la sofisticación y la tradición floricultora de Madrid, Facatativá, Mosquera y Subachoque.",
+    sensations: ["romanticismo", "elegancia", "delicadeza", "conexión emocional", "feminidad madura", "amor sereno"],
+    whyMap: {
+      default: "Hay algo en ti que busca conexión profunda. Rosa Andina nació de los campos de altura bogotanos: limpia, elegante, sin artificio. Una fragancia que no alardea de su belleza porque no necesita.",
+    }
+  },
+  "Jazmín de Noche": {
+    glyph: "🌙",
+    emotion: "Sensualidad",
+    region: "Pacífico colombiano",
+    aroma: "Vainilla Negra",
+    family: "Amaderada dulce oriental",
+    color: "#8A6B4A",
+    desc: "Representa la sensación nocturna y seductora de las flores tropicales que liberan su aroma al caer la noche. Evoca selvas húmedas, lluvia cálida, flores nocturnas y el Pacífico colombiano.",
+    sensations: ["misterio", "noche", "calidez", "profundidad", "sensualidad", "lujo silencioso"],
+    whyMap: {
+      default: "Hay algo en ti que no necesita decirse: se percibe. Jazmín de Noche pertenece a quienes habitan la noche con elegancia, sin apresurarse. Vainilla oscura, calor, profundidad. Un lujo que no se anuncia.",
+    }
+  },
+  "Lirio de Agua": {
+    glyph: "💧",
+    emotion: "Pureza",
+    region: "Amazonía y humedales colombianos",
+    aroma: "Lino Fresco",
+    family: "Floral limpia acuática",
+    color: "#4A7A8A",
+    desc: "El lino fresco transmite limpieza y serenidad. El lirio de agua se asocia con superficies silenciosas, lagunas, humedales y espacios cristalinos.",
+    sensations: ["limpieza", "serenidad", "orden", "paz mental", "ligereza", "minimalismo", "agua tranquila"],
+    whyMap: {
+      default: "Tu mente necesita espacio. Lirio de Agua despeja el ambiente como el agua sobre piedra limpia: sin drama, sin exceso. Solo claridad mineral y la sensación de que el orden es posible.",
+    }
+  },
+  "Brisa Insular": {
+    glyph: "🌴",
+    emotion: "Alegría",
+    region: "Caribe colombiano",
+    aroma: "Elixir Tropical + Coco Naranja",
+    family: "Frutal cítrica tropical",
+    color: "#C8864A",
+    desc: "Representa el Caribe colombiano desde una visión elegante y luminosa. El coco aporta calidez tropical y la naranja energía solar. Inspirada en Cartagena, Barú y las playas tropicales.",
+    sensations: ["vacaciones", "energía solar", "libertad", "felicidad", "playa", "atardecer", "calidez tropical"],
+    whyMap: {
+      default: "Hay algo en ti que quiere celebrar el momento presente. Brisa Insular no disimula su alegría: coco dulce, cítrico vibrante, luz caribeña. Porque a veces el lujo más auténtico es simplemente ser feliz.",
+    }
+  },
+  "Costa Nocturna": {
+    glyph: "🌊",
+    emotion: "Claridad",
+    region: "San Andrés y Providencia",
+    aroma: "Piedra Marina",
+    family: "Oceánica amaderada",
+    color: "#2C5A6A",
+    desc: "Recrea la sensación del viento salado golpeando rocas húmedas durante la noche. Es fresca, mineral, elegante, limpia y profundamente unisex.",
+    sensations: ["claridad mental", "frescura oceánica", "profundidad", "elegancia unisex", "calma mental", "viento salado", "rocas húmedas"],
+    whyMap: {
+      default: "Sabes exactamente lo que necesitas. Costa Nocturna no sobreexplica: piedra marina, viento nocturno, sal en el aire. La claridad de quien ha encontrado su norte sin necesitar aplausos.",
+    }
+  }
+};
+
+/* ============================================================
+   QUESTIONS
+   ============================================================ */
+const questions = [
+  {
+    text: "¿Qué emoción quieres invitar a tu espacio hoy?",
+    hint: "Escucha lo que tu cuerpo pide en este momento.",
+    options: [
+      { emoji:"🌫️", label:"Calma", sub:"Silencio, respiración, descanso profundo.", scores:{"Orquídea de Niebla":3,"Lirio de Agua":1} },
+      { emoji:"🌹", label:"Amor", sub:"Conexión, ternura, presencia del corazón.", scores:{"Rosa Andina":3,"Jazmín de Noche":1} },
+      { emoji:"🌙", label:"Misterio", sub:"Profundidad, seducción, noche interior.", scores:{"Jazmín de Noche":3,"Costa Nocturna":1} },
+      { emoji:"☀️", label:"Alegría", sub:"Energía, luz, celebración del momento.", scores:{"Brisa Insular":3,"Rosa Andina":1} },
+      { emoji:"💎", label:"Claridad", sub:"Foco, orden, pensamiento limpio.", scores:{"Costa Nocturna":3,"Lirio de Agua":2} },
+    ]
+  },
+  {
+    text: "¿A qué paisaje colombiano quieres viajar sin moverte?",
+    hint: "Cierra los ojos. ¿Qué imagen aparece primero?",
+    options: [
+      { emoji:"🏔️", label:"Bosque de niebla andino", sub:"Frescura, musgo, neblina entre los árboles.", scores:{"Orquídea de Niebla":3,"Lirio de Agua":1} },
+      { emoji:"🌸", label:"Cultivos de flores en la Sabana", sub:"Campos abiertos, rosas de altura, brisa fría.", scores:{"Rosa Andina":3} },
+      { emoji:"🌊", label:"Selva del Pacífico en la noche", sub:"Calor húmedo, lluvia, flores que solo florecen oscuras.", scores:{"Jazmín de Noche":3,"Brisa Insular":1} },
+      { emoji:"🪷", label:"Humedal amazónico al amanecer", sub:"Agua quieta, niebla baja, silencio mineral.", scores:{"Lirio de Agua":3,"Orquídea de Niebla":1} },
+      { emoji:"🏖️", label:"Playa caribeña al atardecer", sub:"Coco, sal, arena dorada, luz naranja.", scores:{"Brisa Insular":3} },
+      { emoji:"🌑", label:"Costa rocosa de Providencia en la noche", sub:"Piedra húmeda, viento marino, luna llena.", scores:{"Costa Nocturna":3,"Jazmín de Noche":1} },
+    ]
+  },
+  {
+    text: "¿Cómo quieres que se sienta tu hogar en este momento?",
+    hint: "Un espacio puede hablarte. ¿Qué quieres que diga el tuyo?",
+    options: [
+      { emoji:"🛁", label:"Como un retiro íntimo", sub:"Spa privado, silencio recuperador, temperatura perfecta.", scores:{"Orquídea de Niebla":3,"Lirio de Agua":1} },
+      { emoji:"🕯️", label:"Cálido y acogedor", sub:"Luces tenues, presencia, mesa puesta con amor.", scores:{"Rosa Andina":2,"Jazmín de Noche":2,"Orquídea de Niebla":1} },
+      { emoji:"🌒", label:"Íntimo y sensorial", sub:"Oscuridad suave, textura, profundidad.", scores:{"Jazmín de Noche":3,"Costa Nocturna":1} },
+      { emoji:"🌿", label:"Ordenado y sereno", sub:"Cada cosa en su lugar, mente despejada, sin ruido.", scores:{"Lirio de Agua":3,"Costa Nocturna":1} },
+      { emoji:"🎊", label:"Festivo y vibrante", sub:"Energía, movimiento, celebración silenciosa.", scores:{"Brisa Insular":3,"Rosa Andina":1} },
+      { emoji:"🌬️", label:"Fresco y despejado", sub:"Ventana abierta, aire limpio, sin carga.", scores:{"Costa Nocturna":3,"Lirio de Agua":1} },
+    ]
+  },
+  {
+    text: "¿Qué familia de aromas te seduce más?",
+    hint: "No pienses demasiado. La nariz tiene memoria emocional.",
+    options: [
+      { emoji:"🌺", label:"Florales cremosos", sub:"Lavanda, vainilla, confort, suavidad.", scores:{"Orquídea de Niebla":3,"Rosa Andina":1} },
+      { emoji:"🌷", label:"Florales frescos y clásicos", sub:"Rosa pura, frescura, elegancia sin artificio.", scores:{"Rosa Andina":3} },
+      { emoji:"🍂", label:"Orientales amaderados", sub:"Oscuros, dulces, especiados, profundos.", scores:{"Jazmín de Noche":3} },
+      { emoji:"💧", label:"Limpios y acuáticos", sub:"Lino, agua, mineralidad, frescura cristalina.", scores:{"Lirio de Agua":3,"Costa Nocturna":1} },
+      { emoji:"🍊", label:"Cítricos y tropicales", sub:"Naranja, coco, energía, sol caribeño.", scores:{"Brisa Insular":3} },
+      { emoji:"🪨", label:"Oceánicos y minerales", sub:"Sal marina, madera, viento, profundidad.", scores:{"Costa Nocturna":3,"Lirio de Agua":1} },
+    ]
+  },
+  {
+    text: "¿Qué momento estás tratando de crear?",
+    hint: "Las velas no decoran. Crean escenas.",
+    options: [
+      { emoji:"📖", label:"Una noche de lectura en silencio", sub:"Tú, un libro, y nadie más.", scores:{"Orquídea de Niebla":3,"Lirio de Agua":1} },
+      { emoji:"💌", label:"Una velada romántica íntima", sub:"Flores, vino, presencia plena.", scores:{"Rosa Andina":3,"Jazmín de Noche":1} },
+      { emoji:"✨", label:"Una noche para ti, solo para ti", sub:"Baño caliente, música baja, lujo personal.", scores:{"Jazmín de Noche":3,"Orquídea de Niebla":1} },
+      { emoji:"🧘", label:"Una mañana de meditación o yoga", sub:"Cuerpo despierto, mente en blanco, gratitud.", scores:{"Lirio de Agua":3,"Orquídea de Niebla":1} },
+      { emoji:"🥂", label:"Una reunión especial con personas que quieres", sub:"Risas, energía, conexión.", scores:{"Brisa Insular":3,"Rosa Andina":1} },
+      { emoji:"💻", label:"Una sesión de trabajo enfocado", sub:"Claridad, concentración, sin distracción.", scores:{"Costa Nocturna":3,"Lirio de Agua":1} },
+    ]
+  },
+  {
+    text: "¿Cuál de estas palabras te habita hoy?",
+    hint: "La más honesta, no la más bonita.",
+    options: [
+      { emoji:"🌫️", label:"Descanso", sub:"", scores:{"Orquídea de Niebla":3,"Lirio de Agua":1} },
+      { emoji:"🌹", label:"Ternura", sub:"", scores:{"Rosa Andina":3,"Orquídea de Niebla":1} },
+      { emoji:"🔥", label:"Deseo", sub:"", scores:{"Jazmín de Noche":3,"Brisa Insular":1} },
+      { emoji:"🪷", label:"Serenidad", sub:"", scores:{"Lirio de Agua":3,"Costa Nocturna":1} },
+      { emoji:"🌴", label:"Libertad", sub:"", scores:{"Brisa Insular":3,"Costa Nocturna":1} },
+      { emoji:"🌊", label:"Nitidez", sub:"", scores:{"Costa Nocturna":3,"Lirio de Agua":1} },
+    ]
+  },
+  {
+    text: "Si pudieras encender una vela solo para ti, ¿en qué hora del día sería?",
+    hint: "Cada hora tiene su luz. ¿Cuál es la tuya?",
+    options: [
+      { emoji:"🌅", label:"Al amanecer", sub:"Gratitud tranquila antes de que el día comience.", scores:{"Lirio de Agua":2,"Orquídea de Niebla":2} },
+      { emoji:"☀️", label:"A media mañana", sub:"Energía en movimiento, claridad activa.", scores:{"Brisa Insular":2,"Costa Nocturna":2} },
+      { emoji:"🌆", label:"Al atardecer", sub:"Transición, color, el día que cierra suave.", scores:{"Rosa Andina":2,"Brisa Insular":2} },
+      { emoji:"🌙", label:"En la noche", sub:"El mundo en pausa, tú despierto.", scores:{"Jazmín de Noche":3,"Costa Nocturna":1} },
+      { emoji:"🕯️", label:"En cualquier momento que lo necesite", sub:"No depende del reloj, depende de cómo me siento.", scores:{"Orquídea de Niebla":2,"Rosa Andina":1} },
+    ]
+  },
+  {
+    text: "¿Qué tipo de silencio prefieres?",
+    hint: "El silencio también tiene texturas.",
+    options: [
+      { emoji:"🏔️", label:"Silencio de montaña con niebla", sub:"Profundo, húmedo, envolvente.", scores:{"Orquídea de Niebla":3} },
+      { emoji:"🌸", label:"Silencio de jardín en flor", sub:"Sereno, perfumado, lleno de vida quieta.", scores:{"Rosa Andina":3,"Lirio de Agua":1} },
+      { emoji:"🌃", label:"Silencio nocturno tropical", sub:"Cálido, oscuro, vivo debajo.", scores:{"Jazmín de Noche":3} },
+      { emoji:"🌊", label:"Silencio del mar en calma", sub:"Mineral, vasto, sin bordes.", scores:{"Costa Nocturna":3,"Lirio de Agua":1} },
+      { emoji:"🌴", label:"Silencio de playa vacía", sub:"Libre, luminoso, sin agenda.", scores:{"Brisa Insular":3} },
+      { emoji:"🪟", label:"Silencio de habitación ordenada", sub:"Limpio, claro, sin ruido visual.", scores:{"Lirio de Agua":3,"Costa Nocturna":1} },
+    ]
+  }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let current = 0;
+let scores = {};
+let selectedAnswer = null;
+
+// Init scores
+Object.keys(fragrances).forEach(k => scores[k] = 0);
+
+/* ============================================================
+   PARTICLES
+   ============================================================ */
+function buildParticles() {
+  const wrap = document.getElementById('particles');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      top:${40 + Math.random()*50}%;
+      --dur:${4 + Math.random()*6}s;
+      --delay:${Math.random()*6}s;
+      --op:${0.2 + Math.random()*0.4};
+    `;
+    wrap.appendChild(p);
+  }
+}
+
+/* ============================================================
+   QUIZ LOGIC
+   ============================================================ */
+function startQuiz() {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  buildQuiz();
+  updateProgress();
+}
+
+function buildQuiz() {
+  const body = document.getElementById('quiz-body');
+  body.innerHTML = '';
+
+  questions.forEach((q, qi) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'question-wrap' + (qi === 0 ? ' active' : '');
+    wrap.id = `q${qi}`;
+
+    const opts = q.options.map((o, oi) => `
+      <div class="option-card" onclick="selectOption(${qi}, ${oi})" id="opt-${qi}-${oi}">
+        <div class="opt-radio"></div>
+        <span class="opt-emoji">${o.emoji}</span>
+        <p class="opt-label">${o.label}</p>
+        ${o.sub ? `<p class="opt-sub">${o.sub}</p>` : ''}
+      </div>
+    `).join('');
+
+    wrap.innerHTML = `
+      <p class="q-number">Pregunta ${qi + 1} de ${questions.length}</p>
+      <h2 class="q-text">${q.text}</h2>
+      <p class="q-hint">${q.hint}</p>
+      <div class="options-grid">${opts}</div>
+      <button class="btn-next" id="btn-next-${qi}" onclick="nextQuestion(${qi})">
+        <div class="btn-bg"></div>
+        <span>${qi === questions.length - 1 ? 'Ver mi fragancia' : 'Continuar'}</span>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+          <path d="M10 1L15 6L10 11M0 6H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    `;
+    body.appendChild(wrap);
+  });
+}
+
+function selectOption(qi, oi) {
+  // Deselect previous
+  document.querySelectorAll(`#q${qi} .option-card`).forEach(c => c.classList.remove('selected'));
+  document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
+  document.getElementById(`btn-next-${qi}`).classList.add('ready');
+  selectedAnswer = { qi, oi };
+}
+
+function nextQuestion(qi) {
+  const sel = document.querySelector(`#q${qi} .option-card.selected`);
+  if (!sel) return;
+
+  const optIdx = parseInt(sel.id.split('-')[2]);
+  const opt = questions[qi].options[optIdx];
+
+  // Add scores
+  Object.entries(opt.scores).forEach(([frag, pts]) => {
+    scores[frag] = (scores[frag] || 0) + pts;
+  });
+
+  if (qi < questions.length - 1) {
+    document.getElementById(`q${qi}`).classList.remove('active');
+    current = qi + 1;
+    const next = document.getElementById(`q${current}`);
+    next.classList.add('active');
+    next.style.animation = 'none';
+    next.offsetHeight; // reflow
+    next.style.animation = '';
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    showResult();
+  }
+}
+
+function updateProgress() {
+  const pct = Math.round((current / questions.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('q-label').textContent = `Pregunta ${current + 1} de ${questions.length}`;
+  document.getElementById('q-pct').textContent = pct + '%';
+}
+
+/* ============================================================
+   RESULT
+   ============================================================ */
+function showResult() {
+  // Find winner
+  let winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const frag = fragrances[winner];
+
+  document.getElementById('quiz').style.display = 'none';
+  const resultEl = document.getElementById('result');
+  resultEl.style.display = 'block';
+
+  document.getElementById('r-glyph').textContent = frag.glyph;
+  document.getElementById('r-name').textContent = winner;
+  document.getElementById('r-emotion').textContent = frag.emotion;
+  document.getElementById('r-region').textContent = frag.region;
+  document.getElementById('r-aroma').textContent = frag.aroma;
+  document.getElementById('r-family').textContent = frag.family;
+  document.getElementById('r-desc').textContent = frag.desc;
+  document.getElementById('r-why').textContent = frag.whyMap.default;
+  document.getElementById('result-accent').style.setProperty('--result-color', frag.color);
+  document.getElementById('result-card').style.setProperty('--result-color', frag.color);
+
+  // Show collection
+  buildCollection(winner);
+  document.getElementById('collection').style.display = 'block';
+  document.getElementById('quiz-footer').style.display = 'block';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   COLLECTION
+   ============================================================ */
+function buildCollection(highlight) {
+  const grid = document.getElementById('collection-grid');
+  grid.innerHTML = '';
+  Object.entries(fragrances).forEach(([name, f]) => {
+    const card = document.createElement('div');
+    card.className = 'frag-card';
+    card.style.setProperty('--frag-color', f.color);
+    if (name === highlight) {
+      card.style.borderColor = 'rgba(200,169,106,0.5)';
+    }
+    card.innerHTML = `
+      <span class="frag-glyph">${f.glyph}</span>
+      <p class="frag-name">${name}</p>
+      <p class="frag-emotion">${f.emotion}</p>
+      <p class="frag-line"><strong>Aroma</strong>${f.aroma}</p>
+      <p class="frag-line"><strong>Región</strong>${f.region}</p>
+      <p class="frag-line"><strong>Familia</strong>${f.family}</p>
+      <p class="frag-desc">${f.desc.substring(0, 120)}…</p>
+      ${name === highlight ? '<p style="margin-top:12px;font-size:10px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;">✦ Tu fragancia</p>' : ''}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function scrollToCollection() {
+  document.getElementById('collection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  scores = {};
+  Object.keys(fragrances).forEach(k => scores[k] = 0);
+  current = 0;
+  selectedAnswer = null;
+
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('collection').style.display = 'none';
+  document.getElementById('quiz-footer').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  buildQuiz();
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+buildParticles();
+</script>
+</body>
+</html>
